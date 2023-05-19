@@ -17,18 +17,18 @@ DOMAIN = "UR10_ha"
 class UR10RobotEntity(SensorEntity):
     def __init__(self):
         self._is_on = False
-        self._attr_name = "UR10"
+        self._attr_name = "ur10robot"
         self._attr_unique_id = "ur10robot"
         self._attr_icon = "mdi:robot-industrial"
-        self._attr_should_poll = False
-        self._attr_available = True
+        #self._attr_should_poll = False
+        #self._attr_available = True
 
-        self.ur10_listener = UR10Listener("172.22.114.160", 125, "rtde/record_configuration.xml")
-        self.booln = False
+        #self.ur10_listener = UR10Listener("172.22.114.160", 125, "rtde/record_configuration.xml")
+        #self.booln = False
 
     @property
     def state(self):
-        return self.booln
+        return True
 
 
 async def async_setup(hass: HomeAssistant, config: dict):
