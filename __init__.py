@@ -2,66 +2,33 @@ import logging
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 
-from homeassistant.components.binary_sensor import BinarySensorDeviceClass
+
 from homeassistant.core import HomeAssistant
 from homeassistant.const import CONF_NAME
 from homeassistant.helpers.entity_component import EntityComponent
 from homeassistant.components.sensor import SensorEntity
+
+from rtde.rtde_ur10_connection import UR10Listener
 
 _LOGGER = logging.getLogger(__name__)
 
 DOMAIN = "UR10_ha"
 
 class UR10RobotEntity(SensorEntity):
-    def __init__(self, name):
+    def __init__(self):
         self._is_on = False
-        self._attr_name = name
-        self._attr_unique_id = name
-        self._attr_icon = "mdi:hammer-screwdriver"
+        self._attr_name = "UR10"
+        self._attr_unique_id = "ur10robot"
+        self._attr_icon = "mdi:robot-industrial"
         self._attr_should_poll = False
+        self._attr_available = True
+
+        self.ur10_listener = UR10Listener("172.22.114.160", 125, "rtde/record_configuration.xml")
+        self.booln = False:
 
     @property
-    def is_on(self):
-        """If the switch is currently on or off."""
-        return self._is_on
-
-    def start_assembly(self):
-        self._is_on = True
-        self.schedule_update_ha_state(True)
-
-    def finish_assembly(self):
-        self._is_on = False
-        self.schedule_update_ha_state(True)
+    def state(self):
+        return self.booln
 
 
-async def async_setup(hass: HomeAssistant, config: dict):
-    stations = config[DOMAIN].get(CONF_STATIONS)
-    component = EntityComponent(_LOGGER, DOMAIN, hass)
 
-    entities = []
-    for station in stations:
-        entity = StationUptimeEntity(station[CONF_NAME])
-        entities.append(entity)
-
-    await component.async_add_entities(entities)
-
-    async def async_start_assembly(call):
-        entity_id = call.data["entity_id"]
-        entity_obj = component.get_entity(entity_id)
-        entity_obj.start_assembly()
-        entity_obj.async_write_ha_state()
-
-    async def async_finish_assembly(call):
-        entity_id = call.data["entity_id"]
-        entity_obj = component.get_entity(entity_id)
-        entity_obj.finish_assembly()
-        entity_obj.async_write_ha_state()
-
-    hass.services.async_register(
-        DOMAIN, "start_assembly", async_start_assembly, schema=vol.Schema({vol.Required("entity_id"): cv.string})
-    )
-    hass.services.async_register(
-        DOMAIN, "finish_assembly", async_finish_assembly, schema=vol.Schema({vol.Required("entity_id"): cv.string})
-    )
-
-    return True
