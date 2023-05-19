@@ -6,33 +6,13 @@ from homeassistant.components.binary_sensor import BinarySensorDeviceClass
 from homeassistant.core import HomeAssistant
 from homeassistant.const import CONF_NAME
 from homeassistant.helpers.entity_component import EntityComponent
-from homeassistant.components.binary_sensor import BinarySensorEntity
+from homeassistant.components.sensor import SensorEntity
 
 _LOGGER = logging.getLogger(__name__)
 
-DOMAIN = "station_uptime"
+DOMAIN = "UR10_ha"
 
-CONF_STATIONS = "stations"
-
-STATION_SCHEMA = vol.Schema(
-    {
-        vol.Required(CONF_NAME): cv.string,
-    }
-)
-
-CONFIG_SCHEMA = vol.Schema(
-    {
-        DOMAIN: vol.Schema(
-            {
-                vol.Required(CONF_STATIONS): vol.All(cv.ensure_list, [STATION_SCHEMA]),
-            }
-        )
-    },
-    extra=vol.ALLOW_EXTRA,
-)
-
-
-class StationUptimeEntity(BinarySensorEntity):
+class UR10RobotEntity(SensorEntity):
     def __init__(self, name):
         self._is_on = False
         self._attr_name = name
