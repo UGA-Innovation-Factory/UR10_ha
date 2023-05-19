@@ -24,7 +24,7 @@ class UR10RobotEntity(SensorEntity):
         self._attr_available = True
 
         self.ur10_listener = UR10Listener("172.22.114.160", 125, "rtde/record_configuration.xml")
-        self.booln = False:
+        self.booln = False
 
     @property
     def state(self):
