@@ -1,9 +1,9 @@
 {
-    "domain": "station_uptime",
-    "name": "Lean Manufacturing Station Uptime",
-    "documentation": "https://github.com/UGA-Innovation-Factory/station_uptime",
+    "domain": "UR10_ha",
+    "name": "UR10 Robot Integration for HomeAssistant",
+    "documentation": "https://github.com/UGA-Innovation-Factory/UR10_ha",
     "dependencies": [],
-    "codeowners": ["@jyumpp"],
+    "codeowners": ["@Tomz295"],
     "requirements": [],
     "version": "0.1.0",
     "issue_tracker": ""
