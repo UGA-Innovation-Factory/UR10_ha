@@ -52,24 +52,19 @@ import logging
 import random
 import async_timeout
 
+from homeassistant.core import HomeAssistant
 from homeassistant.components.sensor import SensorEntity
+from homeassistant.helpers.entity_component import EntityComponent
 from homeassistant.core import callback
 from homeassistant.exceptions import ConfigEntryAuthFailed
-from homeassistant.helpers.update_coordinator import (
-    CoordinatorEntity,
-    DataUpdateCoordinator,
-    UpdateFailed,
-)
+from homeassistant.helpers.update_coordinator import CoordinatorEntity, DataUpdateCoordinator, UpdateFailed
 
 DOMAIN = "urha"
 
 _LOGGER = logging.getLogger(__name__)
 
 
-async def async_setup_entry(hass, entry, async_add_entities):
-    """Config entry example."""
-    # assuming API object stored here by __init__.py
-    # my_api = hass.data[DOMAIN][entry.entry_id]
+async def async_setup(hass: HomeAssistant, config: dict):
     coordinator = MyCoordinator(hass)
 
     # Fetch initial data so we have data when entities subscribe
@@ -82,9 +77,8 @@ async def async_setup_entry(hass, entry, async_add_entities):
     #
     await coordinator.async_config_entry_first_refresh()
 
-    async_add_entities(
-        MyEntity(coordinator, idx) for idx, ent in enumerate(coordinator.data)
-    )
+    component = EntityComponent(_LOGGER, DOMAIN, hass)
+    component.async_add_entities([MyEntity(coordinator, idx) for idx, ent in enumerate(coordinator.data)])
 
 
 class MyCoordinator(DataUpdateCoordinator):
