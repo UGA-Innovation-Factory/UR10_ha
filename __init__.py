@@ -16,22 +16,23 @@ _LOGGER = logging.getLogger(__name__)
 DOMAIN = "UR10_ha"
 
 class UR10RobotEntity(SensorEntity):
-    def __init__(self):
+    def __init__(self, name):
         self._is_on = False
-        self._attr_name = "ur10robot"
+        self._attr_name = name
         self._attr_unique_id = "ur10robot"
         self._attr_icon = "mdi:robot-industrial"
+        self._state = None
 
         #self.ur10_listener = UR10Listener("172.22.114.160", 125, "rtde/record_configuration.xml")
         #self.booln = False
 
     @property
     def state(self):
-        return self.state
+        return self._state
     
     def update(self):
-        #self.state = self.ur10_listener.get_all_data()
-        self.state = random.randint(0, 100)
+        #self._state = self.ur10_listener.get_all_data()
+        self._state = random.randint(0, 100)
         pass
 
 
