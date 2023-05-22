@@ -52,7 +52,7 @@ import logging
 import random
 import async_timeout
 
-from from homeassistant.components.sensor import SensorEntity
+from homeassistant.components.sensor import SensorEntity
 from homeassistant.core import callback
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.update_coordinator import (
