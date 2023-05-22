@@ -9,7 +9,7 @@ from homeassistant.const import CONF_NAME
 from homeassistant.helpers.entity_component import EntityComponent
 from homeassistant.components.sensor import SensorEntity
 
-from rtde.rtde_ur10_connection import UR10Listener
+#from rtde.rtde_ur10_connection import UR10Listener
 
 _LOGGER = logging.getLogger(__name__)
 
