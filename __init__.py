@@ -39,6 +39,6 @@ class UR10RobotEntity(SensorEntity):
 async def async_setup(hass: HomeAssistant, config: dict):
     component = EntityComponent(_LOGGER, DOMAIN, hass)
 
-    await component.async_add_entities([UR10RobotEntity()])
+    await component.async_add_entities([UR10RobotEntity("ur10robot")])
 
     return True
