@@ -1,5 +1,5 @@
 {
-    "domain": "UR10_ha",
+    "domain": "urha",
     "name": "UR10 Robot Integration for HomeAssistant",
     "documentation": "https://github.com/UGA-Innovation-Factory/UR10_ha",
     "dependencies": [],

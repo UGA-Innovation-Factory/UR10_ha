@@ -13,13 +13,14 @@ from homeassistant.components.sensor import SensorEntity
 
 _LOGGER = logging.getLogger(__name__)
 
-DOMAIN = "UR10_ha"
+DOMAIN = "urha"
 
 class UR10RobotEntity(SensorEntity):
     def __init__(self, name):
         self._is_on = False
         self._attr_name = name
-        self._attr_unique_id = "ur10robot"
+        self._attr_unique_id = name
+        self._attr_has_entity_name = True
         self._attr_icon = "mdi:robot-industrial"
         self._state = None
 
@@ -39,6 +40,6 @@ class UR10RobotEntity(SensorEntity):
 async def async_setup(hass: HomeAssistant, config: dict):
     component = EntityComponent(_LOGGER, DOMAIN, hass)
 
-    await component.async_add_entities([UR10RobotEntity("ur10robot")])
+    await component.async_add_entities([UR10RobotEntity("ur_10")])
 
     return True
