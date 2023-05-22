@@ -1,6 +1,7 @@
 import logging
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
+import random
 
 
 from homeassistant.core import HomeAssistant
@@ -20,22 +21,23 @@ class UR10RobotEntity(SensorEntity):
         self._attr_name = "ur10robot"
         self._attr_unique_id = "ur10robot"
         self._attr_icon = "mdi:robot-industrial"
-        #self._attr_should_poll = False
-        #self._attr_available = True
 
         #self.ur10_listener = UR10Listener("172.22.114.160", 125, "rtde/record_configuration.xml")
         #self.booln = False
 
     @property
     def state(self):
-        return True
+        return self.state
+    
+    def update(self):
+        #self.state = self.ur10_listener.get_all_data()
+        self.state = random.randint(0, 100)
+        pass
 
 
 async def async_setup(hass: HomeAssistant, config: dict):
     component = EntityComponent(_LOGGER, DOMAIN, hass)
 
-    entities = [UR10RobotEntity()]
-
-    await component.async_add_entities(entities)
+    await component.async_add_entities([UR10RobotEntity()])
 
     return True
