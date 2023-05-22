@@ -100,7 +100,7 @@ class MyCoordinator(DataUpdateCoordinator):
             # Polling interval. Will only be polled if there are subscribers.
             update_interval=timedelta(seconds=1),
         )
-        self.my_api = "UR10 instance here"
+        self.my_api = ["a", "b", "c"]
 
     async def _async_update_data(self):
         """Fetch data from API endpoint.
@@ -115,8 +115,7 @@ class MyCoordinator(DataUpdateCoordinator):
                 # Grab active context variables to limit data required to be fetched from API
                 # Note: using context is not required if there is no need or ability to limit
                 # data retrieved from API.
-                listening_idx = list(self.async_contexts())
-                return await {listening_idx[i]:i for i in range(len(listening_idx))}# self.my_api.fetch_data(listening_idx)
+                return await {self.my_api[i]:i for i in range(len(self.my_api))}# self.my_api.fetch_data(listening_idx)
         except Exception as err:
             # Raising ConfigEntryAuthFailed will cancel future updates
             # and start a config flow with SOURCE_REAUTH (async_step_reauth)
