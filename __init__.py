@@ -98,7 +98,7 @@ class MyCoordinator(DataUpdateCoordinator):
             # Name of the data. For logging purposes.
             name="My sensor",
             # Polling interval. Will only be polled if there are subscribers.
-            update_interval=timedelta(seconds=30),
+            update_interval=timedelta(seconds=1),
         )
         self.my_api = "UR10 instance here"
 
@@ -115,12 +115,13 @@ class MyCoordinator(DataUpdateCoordinator):
                 # Grab active context variables to limit data required to be fetched from API
                 # Note: using context is not required if there is no need or ability to limit
                 # data retrieved from API.
-                listening_idx = set(self.async_contexts())
-                return await listening_idx# self.my_api.fetch_data(listening_idx)
+                listening_idx = list(self.async_contexts())
+                return await {listening_idx[i]:i for i in range(len(listening_idx))}# self.my_api.fetch_data(listening_idx)
         except Exception as err:
             # Raising ConfigEntryAuthFailed will cancel future updates
             # and start a config flow with SOURCE_REAUTH (async_step_reauth)
-            raise ConfigEntryAuthFailed from err
+            #raise ConfigEntryAuthFailed from err
+            raise err
         #except Exception as err:
         #    raise UpdateFailed(f"Error communicating with API: {err}")
 
@@ -145,7 +146,7 @@ class MyEntity(CoordinatorEntity, SensorEntity):
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        self._state = self.coordinator.data[self.idx]["state"]
+        self._state = self.coordinator.data[self.idx]
         self.async_write_ha_state()
 
     # async def async_turn_on(self, **kwargs):
