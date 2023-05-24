@@ -78,11 +78,16 @@ async def async_setup_entry(hass, entry, async_add_entities):
     # If you do not want to retry setup on failure, use
     # coordinator.async_refresh() instead
     #
+    _LOGGER.info("Fetching initial data")
     await coordinator.async_config_entry_first_refresh()
 
+    _LOGGER.info("Adding sensors")
+
     async_add_entities(
-        MyEntity(coordinator, idx) for idx, ent in enumerate(coordinator.data)
+        [MyEntity(coordinator, idx) for idx, ent in enumerate(coordinator.data)]
     )
+    _LOGGER.info("Sensors added")
+    return True
 
 
 class MyCoordinator(DataUpdateCoordinator):
