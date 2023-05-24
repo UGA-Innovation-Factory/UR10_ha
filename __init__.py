@@ -64,8 +64,11 @@ DOMAIN = "urha"
 _LOGGER = logging.getLogger(__name__)
 
 
-async def async_setup(hass: HomeAssistant, config: dict):
-    coordinator = MyCoordinator(hass)
+async def async_setup_entry(hass, entry, async_add_entities):
+    """Config entry example."""
+    # assuming API object stored here by __init__.py
+    my_api = hass.data[DOMAIN][entry.entry_id]
+    coordinator = MyCoordinator(hass, my_api)
 
     # Fetch initial data so we have data when entities subscribe
     #
@@ -77,14 +80,15 @@ async def async_setup(hass: HomeAssistant, config: dict):
     #
     await coordinator.async_config_entry_first_refresh()
 
-    component = EntityComponent(_LOGGER, DOMAIN, hass)
-    component.async_add_entities([MyEntity(coordinator, idx) for idx, ent in enumerate(coordinator.data)])
+    async_add_entities(
+        MyEntity(coordinator, idx) for idx, ent in enumerate(coordinator.data)
+    )
 
 
 class MyCoordinator(DataUpdateCoordinator):
     """My custom coordinator."""
 
-    def __init__(self, hass):
+    def __init__(self, hass, my_api):
         """Initialize my coordinator."""
         super().__init__(
             hass,
@@ -92,9 +96,9 @@ class MyCoordinator(DataUpdateCoordinator):
             # Name of the data. For logging purposes.
             name="My sensor",
             # Polling interval. Will only be polled if there are subscribers.
-            update_interval=timedelta(seconds=1),
+            update_interval=timedelta(seconds=30),
         )
-        self.my_api = ["a", "b", "c"]
+        self.my_api = my_api
 
     async def _async_update_data(self):
         """Fetch data from API endpoint.
@@ -102,20 +106,20 @@ class MyCoordinator(DataUpdateCoordinator):
         This is the place to pre-process the data to lookup tables
         so entities can quickly look up their data.
         """
-        try:
+        #try:
             # Note: asyncio.TimeoutError and aiohttp.ClientError are already
             # handled by the data update coordinator.
-            async with async_timeout.timeout(10):
-                # Grab active context variables to limit data required to be fetched from API
-                # Note: using context is not required if there is no need or ability to limit
-                # data retrieved from API.
-                return await {self.my_api[i]:i for i in range(len(self.my_api))}# self.my_api.fetch_data(listening_idx)
-        except Exception as err:
+        async with async_timeout.timeout(10):
+            # Grab active context variables to limit data required to be fetched from API
+            # Note: using context is not required if there is no need or ability to limit
+            # data retrieved from API.
+            ##listening_idx = set(self.async_contexts())
+            return [random.randint(0, 100) for i in range(10)]
+        #except ApiAuthError as err:
             # Raising ConfigEntryAuthFailed will cancel future updates
             # and start a config flow with SOURCE_REAUTH (async_step_reauth)
-            #raise ConfigEntryAuthFailed from err
-            raise err
-        #except Exception as err:
+        #    raise ConfigEntryAuthFailed from err
+        #except ApiError as err:
         #    raise UpdateFailed(f"Error communicating with API: {err}")
 
 
@@ -136,6 +140,11 @@ class MyEntity(CoordinatorEntity, SensorEntity):
         self.idx = idx
         self._state = None
 
+    @property
+    def state(self):
+        """Return the state of the entity."""
+        return self._state
+    
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
