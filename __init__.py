@@ -94,7 +94,7 @@ class MyCoordinator(DataUpdateCoordinator):
             hass,
             _LOGGER,
             # Name of the data. For logging purposes.
-            name="My sensor",
+            name="myur10sensor",
             # Polling interval. Will only be polled if there are subscribers.
             update_interval=timedelta(seconds=30),
         )
@@ -109,12 +109,12 @@ class MyCoordinator(DataUpdateCoordinator):
         #try:
             # Note: asyncio.TimeoutError and aiohttp.ClientError are already
             # handled by the data update coordinator.
-        async with async_timeout.timeout(10):
+        #async with async_timeout.timeout(10):
             # Grab active context variables to limit data required to be fetched from API
             # Note: using context is not required if there is no need or ability to limit
             # data retrieved from API.
             ##listening_idx = set(self.async_contexts())
-            return [random.randint(0, 100) for i in range(10)]
+        return [random.randint(0, 100) for i in range(10)]
         #except ApiAuthError as err:
             # Raising ConfigEntryAuthFailed will cancel future updates
             # and start a config flow with SOURCE_REAUTH (async_step_reauth)
@@ -148,7 +148,8 @@ class MyEntity(CoordinatorEntity, SensorEntity):
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        self._state = self.coordinator.data[self.idx]
+        #self._state = self.coordinator.data[self.idx]
+        self._state = random.randint(0, 100)
         self.async_write_ha_state()
 
     # async def async_turn_on(self, **kwargs):
