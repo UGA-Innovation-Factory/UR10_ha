@@ -21,14 +21,5 @@ class MyCoordinator(DataUpdateCoordinator):
 
 
     async def _async_update_data(self):
-        """Fetch data from API endpoint.
-
-        This is the place to pre-process the data to lookup tables
-        so entities can quickly look up their data.
-        """
-        try:
-            # Note: asyncio.TimeoutError and aiohttp.ClientError are already
-            # handled by the data update coordinator.
-            return [random.randint(0, 100) for i in range(10)]
-        except Exception as err:
-            raise UpdateFailed(f"Error communicating with API: {err}")
+        """Fetch data"""
+        return [random.randint(0, 100) for i in range(10)]
