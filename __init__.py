@@ -64,10 +64,10 @@ DOMAIN = "urha"
 _LOGGER = logging.getLogger(__name__)
 
 
-async def async_setup_entry(hass, entry, async_add_entities):
+async def async_setup_entry(hass, entry):
     """Config entry example."""
     # assuming API object stored here by __init__.py
-    my_api = hass.data[DOMAIN][entry.entry_id]
+    my_api = "hass.data[DOMAIN][entry.entry_id]"
     coordinator = MyCoordinator(hass, my_api)
 
     # Fetch initial data so we have data when entities subscribe
@@ -83,7 +83,8 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
     _LOGGER.info("Adding sensors")
 
-    async_add_entities(
+    component = EntityComponent(_LOGGER, DOMAIN, hass)
+    component.async_add_entities(
         [MyEntity(coordinator, idx) for idx, ent in enumerate(coordinator.data)]
     )
     _LOGGER.info("Sensors added")
@@ -99,7 +100,7 @@ class MyCoordinator(DataUpdateCoordinator):
             hass,
             _LOGGER,
             # Name of the data. For logging purposes.
-            name="myur10sensor",
+            name="myursensors",
             # Polling interval. Will only be polled if there are subscribers.
             update_interval=timedelta(seconds=30),
         )
