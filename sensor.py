@@ -29,6 +29,8 @@ class MyEntity(CoordinatorEntity, SensorEntity):
         """Pass coordinator to CoordinatorEntity."""
         super().__init__(coordinator, context=idx)
         self.idx = idx
+        self._attr_name = f"ur10sensor{idx}"
+        self._attr_unique_id = f"ur10sensor{idx}"
         self._attr_state = None
 
     @callback
