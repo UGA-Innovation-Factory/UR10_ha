@@ -1,15 +1,14 @@
 {
   "domain": "urha",
-  "name": "UR10 for home assistant",
-  "codeowners": [
-    "@Tomz295"
-  ],
+  "name": "UR10 Robot Integration for HomeAssistant",
+  "codeowners": ["@Tomz295"],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://www.home-assistant.io/integrations/urha",
+  "documentation": "https://github.com/UGA-Innovation-Factory/UR10_ha",
   "homekit": {},
   "iot_class": "cloud_polling",
   "requirements": [],
   "ssdp": [],
-  "zeroconf": []
+  "zeroconf": [],
+  "version": "0.1.0"
 }
