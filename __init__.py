@@ -29,6 +29,15 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
     try:
         ur10conn.connect()
+        await coordinator.async_refresh()
+
+        if coordinator.data == None:
+            await coordinator.async_refresh()
+
+        if coordinator.data == None:
+            raise UpdateFailed("Error communicating with UR10")
+
+
     except Exception as err:
         if not DOMAIN in hass.data:
             LOGGER.error(
@@ -39,7 +48,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
         async_call_later(hass, RETRY_INTERVAL, retry_setup)
         return True
 
-    await coordinator.async_refresh()
+
 
     # Data that you want to share with your platforms
     hass.data[DOMAIN] = {"urhacoordinator": coordinator}
