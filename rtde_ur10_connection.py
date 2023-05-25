@@ -56,8 +56,11 @@ class UR10Listener:
     # Disconnect from robot
     def disconnect(self):
         """Disconnect from the UR10 robot"""
-        self.con.send_pause()
-        self.con.disconnect()
+        try:
+            self.con.send_pause()
+            self.con.disconnect()
+        except Exception:
+            pass
         print("UR10 disconnected")
 
     # Connection status
