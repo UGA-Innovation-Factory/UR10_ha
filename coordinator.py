@@ -18,7 +18,7 @@ class UR10Coordinator(DataUpdateCoordinator):
             hass,
             LOGGER,
             name=f"{DOMAIN}coord",
-            update_interval=RETRY_INTERVAL,
+            update_interval=SCAN_INTERVAL,
         )
 
     async def _async_update_data(self):
