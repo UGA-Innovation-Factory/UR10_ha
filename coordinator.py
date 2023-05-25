@@ -31,5 +31,6 @@ class UR10Coordinator(DataUpdateCoordinator):
             return self.urconnection.read_dict_flat()
 
         except Exception as err:
+            self.urconnection.disconnect()
             self.update_interval = RETRY_INTERVAL
             raise UpdateFailed(f"Error communicating with UR10: {err}") from err

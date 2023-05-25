@@ -45,6 +45,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
                 err,
                 RETRY_INTERVAL.total_seconds(),
             )
+        ur10conn.disconnect()
         async_call_later(hass, RETRY_INTERVAL, retry_setup)
         return True
 
