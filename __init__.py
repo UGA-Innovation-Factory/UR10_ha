@@ -1,37 +1,49 @@
 """The UR10 for home assistant integration."""
 from __future__ import annotations
 
-from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.typing import ConfigType
+from homeassistant.helpers.event import async_call_later
+from homeassistant.const import Platform
+from homeassistant.helpers.update_coordinator import UpdateFailed
 
-from .const import DOMAIN
-from .coordinator import MyCoordinator
+from .const import DOMAIN, LOGGER, RETRY_INTERVAL
+from .coordinator import UR10Coordinator
 
-# TODO List the platforms that you want to support.
-# For your initial PR, limit it to 1 platform.
+from .rtde_ur10_connection import UR10Listener
+from .rtde import RTDEException
+
 PLATFORMS: list[Platform] = [Platform.SENSOR]
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+    """Your controller/hub specific code."""
 
-    coordinator = MyCoordinator(hass, entry)
-    await coordinator.async_config_entry_first_refresh()
-    
-    hass.data.setdefault(DOMAIN, {})
-    hass.data[DOMAIN][entry.entry_id] = coordinator
+    async def retry_setup(now):
+        """Retry setup if a connection/timeout happens on Slide API."""
+        hass.data[DOMAIN] = {"retrying_setup": True}
+        await async_setup(hass, config)
 
-    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    ur10conn = UR10Listener("172.22.114.160", 10)
+    coordinator = UR10Coordinator(hass, ur10conn)
+
+    try:
+        ur10conn.connect()
+    except Exception as err:
+        if not DOMAIN in hass.data:
+            LOGGER.error(
+                "Error connecting to UR10: %s. Will try again in %s second(s)",
+                err,
+                RETRY_INTERVAL.total_seconds(),
+            )
+        async_call_later(hass, RETRY_INTERVAL, retry_setup)
+        return True
+
+    await coordinator.async_refresh()
+
+    # Data that you want to share with your platforms
+    hass.data[DOMAIN] = {"urhacoordinator": coordinator}
+
+    hass.helpers.discovery.load_platform("sensor", DOMAIN, {}, config)
 
     return True
-
-
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Unload a config entry."""
-    if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
-        hass.data[DOMAIN].pop(entry.entry_id)
-
-    return unload_ok
-
-
-
