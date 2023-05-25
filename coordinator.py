@@ -24,9 +24,9 @@ class UR10Coordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         """Fetch data"""
         try:
+            self.update_interval = SCAN_INTERVAL
             if not self.urconnection.is_connected():
                 self.urconnection.connect()
-                self.update_interval = SCAN_INTERVAL
 
             return self.urconnection.read_dict_flat()
 

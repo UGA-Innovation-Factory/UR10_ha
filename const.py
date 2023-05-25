@@ -6,5 +6,5 @@ from datetime import timedelta
 
 DOMAIN = "urha"
 LOGGER = logging.getLogger(__package__)
-SCAN_INTERVAL = timedelta(seconds=1/125)
+SCAN_INTERVAL = timedelta(seconds=0.01)
 RETRY_INTERVAL = timedelta(seconds=5)
