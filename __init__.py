@@ -24,7 +24,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
         hass.data[DOMAIN] = {"retrying_setup": True}
         await async_setup(hass, config)
 
-    ur10conn = UR10Listener("172.22.114.160", 1/RETRY_INTERVAL.total_seconds())
+    ur10conn = UR10Listener("172.22.114.160", 100)
     coordinator = UR10Coordinator(hass, ur10conn)
 
     try:
@@ -35,7 +35,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
             await coordinator.async_refresh()
 
         if coordinator.data == None:
-            raise UpdateFailed("Error communicating with UR10")
+            raise UpdateFailed("Error: no data from UR10")
 
 
     except Exception as err:

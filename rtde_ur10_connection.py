@@ -79,12 +79,17 @@ class UR10Listener:
     # Read data from robot and parse output to JSON
     def read_dict(self) -> dict:
         """Reads the current state of the UR10 robot and returns it as a dictionary"""
-        return vars(self.read())
+        r = self.read()
+        if r is None:
+            return None
+        return vars(r)
 
     # Read data from robot and parse output to a flattened JSON dictionary
     def read_dict_flat(self) -> dict:
         """Reads the current state of the UR10 robot and returns it as a flattened dictionary"""
         y = self.read_dict()
+        if y is None:
+            return None
         out = {}
 
         def flatten(x, name=""):
