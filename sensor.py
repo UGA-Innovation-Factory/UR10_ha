@@ -33,6 +33,7 @@ class MyEntity(CoordinatorEntity, SensorEntity):
         """Pass coordinator to CoordinatorEntity."""
         super().__init__(coordinator)
         self.idx = idx
+        self._attr_icon = "mdi:robot-industrial"
         self._attr_name = f"ur10_{idx}"
         self._attr_unique_id = f"ur10_{idx}"
         self._state = 0
