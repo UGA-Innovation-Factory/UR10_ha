@@ -36,6 +36,7 @@ class MyEntity(CoordinatorEntity, SensorEntity):
         self._attr_icon = "mdi:robot-industrial"
         self._attr_name = f"ur10_{idx}"
         self._attr_unique_id = f"ur10_{idx}"
+        self._attr_state_class = "measurement"
         self._state = 0
 
     @callback
