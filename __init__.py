@@ -15,6 +15,8 @@ from .rtde import RTDEException
 
 PLATFORMS: list[Platform] = [Platform.SENSOR]
 
+# TODO: rewrite functionality to work with Config entries and Config Flow
+# Why? Because most porper functionality and helpers of HA depend on having Config entries set up
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     """Your controller/hub specific code."""
