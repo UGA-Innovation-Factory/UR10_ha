@@ -22,9 +22,9 @@ https://www.universal-robots.com/articles/ur/interface-communication/real-time-d
 		<!-- <field name="actual_digital_input_bits" type="UINT64"/> -->
 		<field name="joint_temperatures" type="VECTOR6D"/>
 		<!-- <field name="actual_execution_time" type="DOUBLE"/> -->
-		<!-- <field name="robot_mode" type="INT32"/> -->
+		<field name="robot_mode" type="INT32"/>
 		<!-- <field name="joint_mode" type="VECTOR6INT32"/> -->
-		<!-- <field name="safety_mode" type="INT32"/> -->
+		<field name="safety_mode" type="INT32"/>
 		<!-- <field name="actual_tool_accelerometer" type="VECTOR3D"/> -->
 		<!-- <field name="speed_scaling" type="DOUBLE"/> -->
 		<!-- <field name="target_speed_fraction" type="DOUBLE"/> -->
