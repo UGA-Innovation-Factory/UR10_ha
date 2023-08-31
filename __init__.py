@@ -43,7 +43,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     except Exception as err:
         if not DOMAIN in hass.data:
             LOGGER.error(
-                "Error connecting to UR10: %s. Will try again in %s second(s)",
+                "Error connecting to UR10: %s. Will try again every %s second(s)",
                 err,
                 RETRY_INTERVAL.total_seconds(),
             )
@@ -52,7 +52,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
         return True
 
 
-
+    LOGGER.info("First connection to UR10 successful")
     # Data that you want to share with your platforms
     hass.data[DOMAIN] = {"urhacoordinator": coordinator}
 

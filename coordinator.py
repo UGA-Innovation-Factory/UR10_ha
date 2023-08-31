@@ -20,6 +20,7 @@ class UR10Coordinator(DataUpdateCoordinator):
             name=f"{DOMAIN}coord",
             update_interval=SCAN_INTERVAL,
         )
+        self.printedError = False
 
     async def _async_update_data(self):
         """Fetch data"""
@@ -27,10 +28,17 @@ class UR10Coordinator(DataUpdateCoordinator):
             self.update_interval = SCAN_INTERVAL
             if not self.urconnection.is_connected():
                 self.urconnection.connect()
+                self.printedError = False
+                LOGGER.info("Reconnected to UR10 successfully")
 
             return self.urconnection.read_dict_flat()
 
         except Exception as err:
             self.update_interval = RETRY_INTERVAL
             self.urconnection.disconnect()
+            if not self.printedError:
+                self.printedError = True
+                LOGGER.error("Error connecting to UR10: %s. Will try again every %s second(s)",
+                    err,
+                    RETRY_INTERVAL.total_seconds(),)
             raise UpdateFailed(f"Error communicating with UR10: {err}") from err
