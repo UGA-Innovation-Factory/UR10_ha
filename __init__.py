@@ -26,7 +26,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
         hass.data[DOMAIN] = {"retrying_setup": True}
         await async_setup(hass, config)
 
-    ur10conn = UR10Listener("172.22.114.160", 10)
+    ur10conn = UR10Listener("172.22.114.160", 1)
     coordinator = UR10Coordinator(hass, ur10conn)
 
     try:
